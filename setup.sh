@@ -16,9 +16,9 @@ docker pull mysql
 # run the container on top of the image
 docker run -p 3900:3306 --name mysql -e MYSQL_ROOT_PASSWORD=crossover -d mysql:latest
 
-git clone https://github.com/subrata-git/project-deploy.git && cd project-deploy && docker build -t project-deploy/local:apache .
+git clone https://github.com/subrata-git/project.git && cd project && docker build -t project/local:apache .
 
-docker run -d -p 80:80 --name apache --link mysql:mysql -v /var/www/html:/var/www/html project-deploy/local:apache
+docker run -d -p 80:80 --name apache --link mysql:mysql -v /var/www/html:/var/www/html project/local:apache
 
 cp db.php index.php logout.php /var/www/html/
 cp cronlogs.sh /root && chmod +x /root/cronlogs.sh
