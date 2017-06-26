@@ -5,21 +5,21 @@ set -e -x
 # Needed so that the aptitude/apt-get operations will not be interactive
 export DEBIAN_FRONTEND=noninteractive
 
-add-apt-repository ppa:formorer/icinga --yes
-apt-get --yes --quiet update && apt-get -y --quiet upgrade && apt-get -y --quiet install mysql-client htop git awscli
+sudo add-apt-repository ppa:formorer/icinga --yes
+sudo apt-get --yes --quiet update && sudo apt-get -y --quiet upgrade && sudo apt-get -y --quiet install mysql-client htop git awscli
 
 wget -qO- https://get.docker.com/ | sh
 
 # pull the docker image
-docker pull mysql
+sudo docker pull mysql
 
 # run the container on top of the image
-docker run -p 3900:3306 --name mysql -e MYSQL_ROOT_PASSWORD=crossover -d mysql:latest
+sudo docker run -p 3900:3306 --name mysql -e MYSQL_ROOT_PASSWORD=crossover -d mysql:latest
 
-git clone https://github.com/subrata-git/project.git && cd project && docker build -t project/local:apache .
+sudo git clone https://github.com/subrata-git/project.git && cd project && sudo docker build -t project:apache .
 
-docker run -d -p 80:80 --name apache --link mysql:mysql -v /var/www/html:/var/www/html project/local:apache
+sudo docker run -d -p 80:80 --name apache --link mysql:mysql -v /var/www/html:/var/www/html project:apache
 
-cp db.php index.php logout.php /var/www/html/
-cp cronlogs.sh /root && chmod +x /root/cronlogs.sh
-echo '* 19 * * * /root/cronlogs.sh' | crontab -
+sudo cp db.php index.php logout.php /var/www/html/
+sudo cp cronlogs.sh /root && sudo chmod +x /root/cronlogs.sh
+echo '* 19 * * * /root/cronlogs.sh' | crontab -e
